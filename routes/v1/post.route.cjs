@@ -12,5 +12,6 @@ const upload = multer({
 
 router.post('/', auth, upload.single('file'), postController.createPost)
 router.get('/', auth, postController.getPosts)
+router.post('/:postId/like', auth, postController.toggleLike)
 
 module.exports = router;
