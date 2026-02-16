@@ -10,7 +10,7 @@ const upload = multer({
     limits: { fileSize: 5 * 1024 * 1024 }
 })
 
-router.post('/', auth, upload.single('file'), postController.createPost)
+router.post('/', auth, upload.array('files', 5), postController.createPost)
 router.get('/', auth, postController.getPosts)
 router.post('/:postId/like', auth, postController.toggleLike)
 

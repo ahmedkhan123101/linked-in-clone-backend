@@ -4,15 +4,21 @@ const catchAsync = require('../utils/catchAsync.cjs');
 const { Post } = require('../models/index.cjs');
 
 const createPost = catchAsync(async (req, res, next) => {
+    //Post object.
     const postData = {
         content: req.body.content,
         author: req.user.id,
-    };
-    if (req.file) {
-        postData.file = req.file.buffer
-        postData.contentType = req.file.mimetype
-        postData.fileSize = req.file.size
+        images: []
     }
+    //Post image field. Check if there are files
+    if (req.files && req.files.length > 0) {
+        postData.images = req.files.map(file => ({
+            file: file.buffer,
+            contentType: file.mimetype,
+            fileSize: file.size
+        }))
+    }
+
     const post = await postService.createPost(postData);
     res.status(httpStatus.status.CREATED).send(post);
 })
