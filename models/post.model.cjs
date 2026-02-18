@@ -12,17 +12,10 @@ const postSchema = mongoose.Schema(
             required: true,
             trim: true,
         },
-        images: [{
-            file: {
-                type: Buffer,
-            },
-            contentType: {
-                type: String,
-            },
-            fileSize: {
-                type: Number,
-            }
-        }],
+        images: {
+            type: [String],
+            default: []
+        },
         likes: [{ type: mongoose.SchemaTypes.ObjectId, ref: 'User' }],
         comments: [{ type: mongoose.SchemaTypes.ObjectId }],
     },
