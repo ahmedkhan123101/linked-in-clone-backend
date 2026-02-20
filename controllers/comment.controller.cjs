@@ -26,4 +26,19 @@ const addComment = catchAsync(async (req, res) => {
     res.status(httpStatus.status.CREATED).send(populatedComment)
 })
 
-module.exports = { addComment };
+//Get comments
+const getComments = catchAsync(async (req, res) => {
+    const { postId } = req.params
+    const userId = req.user.id
+
+    //Get comments for postId
+    const comments = await Comment.find({ post: postId }).populate('author', 'name lastName').sort({ createdAt: -1 })
+    const sortedComments = [
+        ...comments.filter(c => c.author._id.toString() === userId),
+        ...comments.filter(c => c.author._id.toString() !== userId)
+    ]
+
+    res.status(httpStatus.status.CREATED).send(sortedComments)
+})
+
+module.exports = { addComment, getComments };
