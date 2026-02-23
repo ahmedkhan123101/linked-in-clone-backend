@@ -59,7 +59,7 @@ const getConnections = catchAsync(async (req, res) => {
             { requester: userId },//either user sent connection
             { recipient: userId },//or received connection
         ]
-    })
+    }).populate('requester', 'name lastName')
 
     res.send(connections)
 })
