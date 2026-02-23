@@ -51,6 +51,24 @@ const acceptRequest = catchAsync(async (req, res) => {
     res.send(connection)
 })
 
+const ignoreRequest = catchAsync(async (req, res) => {
+    const { senderId } = req.params
+    const receiverId = req.user.id
+
+    //Delete request
+    const connection = await Connection.findOneAndDelete({
+        requester: senderId,
+        recipient: receiverId,
+        status: 'pending'
+    })
+
+    if (!connection) {
+        return res.status(404).send({ message: "Connection request/doc not found." })
+    }
+
+    res.status(httpStatus.status.NO_CONTENT).send()
+})
+
 const getConnections = catchAsync(async (req, res) => {
     const userId = req.user.id
 
@@ -63,4 +81,5 @@ const getConnections = catchAsync(async (req, res) => {
 
     res.send(connections)
 })
-module.exports = { sendRequest, acceptRequest, getConnections }
+
+module.exports = { sendRequest, acceptRequest, getConnections, ignoreRequest }
