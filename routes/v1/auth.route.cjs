@@ -3,6 +3,7 @@ const validate = require('../../middlewares/validate.cjs')
 const authValidation = require('../../validations/auth.validation.cjs')
 const authController = require('../../controllers/auth.controller.cjs');
 const auth = require('../../middlewares/auth.cjs');
+const upload = require('../../middlewares/upload.cjs')
 
 const router = express.Router();
 
@@ -14,5 +15,7 @@ router.post('/logout', authController.logout);
 router.get('/me', auth, (req, res) => {
     res.send(req.user)
 });
+
+router.patch('/me/avatar', auth, upload.single("image"), authController.updateAvatar);
 
 module.exports = router;

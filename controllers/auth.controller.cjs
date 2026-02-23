@@ -1,5 +1,6 @@
 const httpStatus = require('http-status')
 const { userService, tokenService, authService } = require('../services/index.cjs'); // Adjust path if needed
+const cloudinary = require('cloudinary').v2
 
 const register = async (req, res, next) => {
     try {
@@ -33,4 +34,27 @@ const logout = async (req, res) => {
     }
 }
 
-module.exports = { register, login, logout };
+const updateAvatar = async (req, res, next) => {
+    try {
+        if (!req.file) {
+            return res.status(400).send({ message: "No file attached." })
+        }
+        const fileBase64 = `data:${req.file.mimetype};base64,${req.file.buffer.toString('base64')}`;
+
+        // Upload to Cloudinary
+        const result = await cloudinary.uploader.upload(fileBase64, {
+            folder: 'avatars',
+        });
+
+        // Update User in DB
+        req.user.profilePicture = result.secure_url;
+        await req.user.save();
+
+        res.send(req.user);
+    }
+    catch (error) {
+        next(error)
+    }
+}
+
+module.exports = { register, login, logout, updateAvatar };
