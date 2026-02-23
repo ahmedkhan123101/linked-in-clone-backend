@@ -9,7 +9,7 @@ const userSchema = mongoose.Schema(
             required: true,
             trim: true,
         },
-        lastName: {  // Added as per your requirements
+        lastName: {
             type: String,
             required: true,
             trim: true,
@@ -56,12 +56,9 @@ userSchema.methods.isPasswordMatch = async function (password) {
 userSchema.methods.toJSON = function () {
     const user = this;
     const userObject = user.toObject();
-    delete userObject.password; // Remove password from the returned object
+    delete userObject.password;
     return userObject;
 };
 
-module.exports = mongoose.model('User', userSchema);
-
 const User = mongoose.model('User', userSchema);
-
 module.exports = User;

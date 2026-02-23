@@ -50,4 +50,17 @@ const acceptRequest = catchAsync(async (req, res) => {
     await connection.save()
     res.send(connection)
 })
-module.exports = { sendRequest, acceptRequest }
+
+const getConnections = catchAsync(async (req, res) => {
+    const userId = req.user.id
+
+    const connections = await Connection.find({
+        $or: [
+            { requester: userId },//either user sent connection
+            { recipient: userId },//or received connection
+        ]
+    })
+
+    res.send(connections)
+})
+module.exports = { sendRequest, acceptRequest, getConnections }

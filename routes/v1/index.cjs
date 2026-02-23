@@ -2,6 +2,7 @@ const express = require('express')
 const authRoute = require('./auth.route.cjs')
 const postRoute = require('./post.route.cjs')
 const connectionRoute = require('./connection.route.cjs')
+const userRoute = require('./user.route.cjs')
 
 const router = express.Router()
 
@@ -17,6 +18,10 @@ const defaultRoutes = [
     {
         path: '/connections',
         route: connectionRoute
+    },
+    {
+        path: '/users',
+        route: userRoute
     },
 ]
 

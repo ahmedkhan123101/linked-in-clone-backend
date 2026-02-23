@@ -5,5 +5,6 @@ const connectionController = require('../../controllers/connection.controller.cj
 
 router.post('/request/:recipientId', auth, connectionController.sendRequest)
 router.patch('/accept/:connectionId', auth, connectionController.acceptRequest)
+router.get('/', auth, connectionController.getConnections)
 
 module.exports = router;
