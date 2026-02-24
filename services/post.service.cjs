@@ -11,7 +11,7 @@ const createPost = async (postBody) => {
 
 //Retreive posts
 const queryPosts = async () => {
-    const posts = await Post.find().populate('author', 'name').sort({ createdAt: -1 })
+    const posts = await Post.find().populate('author', 'name lastName profilePicture').sort({ createdAt: -1 })
     return posts;
 }
 
