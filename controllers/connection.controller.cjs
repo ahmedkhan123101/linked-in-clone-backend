@@ -77,7 +77,7 @@ const getConnections = catchAsync(async (req, res) => {
             { requester: userId },//either user sent connection
             { recipient: userId },//or received connection
         ]
-    }).populate('requester', 'name lastName')
+    }).populate('requester', 'name lastName profilePicture')
 
     res.send(connections)
 })
