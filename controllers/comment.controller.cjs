@@ -32,7 +32,7 @@ const getComments = catchAsync(async (req, res) => {
     const userId = req.user.id
 
     //Get comments for postId
-    const comments = await Comment.find({ post: postId }).populate('author', 'name lastName').sort({ createdAt: -1 })
+    const comments = await Comment.find({ post: postId }).populate('author', 'name lastName profilePicture').sort({ createdAt: -1 })
     const sortedComments = [
         ...comments.filter(c => c.author._id.toString() === userId),
         ...comments.filter(c => c.author._id.toString() !== userId)
