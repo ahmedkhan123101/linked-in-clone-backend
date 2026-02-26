@@ -6,6 +6,7 @@ const connectionController = require('../../controllers/connection.controller.cj
 router.post('/request/:recipientId', auth, connectionController.sendRequest)
 router.patch('/accept/:connectionId', auth, connectionController.acceptRequest)
 router.get('/', auth, connectionController.getConnections)
+router.get('/my-connections', auth, connectionController.getMyConnections)
 router.delete('/ignore/:senderId', auth, connectionController.ignoreRequest)
 
 module.exports = router;

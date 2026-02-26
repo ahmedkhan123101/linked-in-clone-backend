@@ -82,4 +82,20 @@ const getConnections = catchAsync(async (req, res) => {
     res.send(connections)
 })
 
-module.exports = { sendRequest, acceptRequest, getConnections, ignoreRequest }
+const getMyConnections = catchAsync(async (req, res) => {
+    const userId = req.user.id
+    //find connections where userId exists and status is accepted.
+    const connections = await Connection.find({
+        status: 'accepted',
+        $or: [
+            { recipient: userId },
+            { requester: userId }
+        ]
+    })
+        //need both coz if any one of requester or recipient happened to be of currentUser.
+        .populate('requester', 'name lastName profilePicture')
+        .populate('recipient', 'name lastName profilePicture')
+    res.send(connections)
+})
+
+module.exports = { sendRequest, acceptRequest, getConnections, ignoreRequest, getMyConnections }
