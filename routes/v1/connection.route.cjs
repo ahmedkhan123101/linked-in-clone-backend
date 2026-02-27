@@ -8,5 +8,6 @@ router.patch('/accept/:connectionId', auth, connectionController.acceptRequest)
 router.get('/', auth, connectionController.getConnections)
 router.get('/my-connections', auth, connectionController.getMyConnections)
 router.delete('/ignore/:senderId', auth, connectionController.ignoreRequest)
+router.delete('/cancel/:recipientId', auth, connectionController.cancelRequest)
 
 module.exports = router;
