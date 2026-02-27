@@ -99,21 +99,21 @@ const getMyConnections = catchAsync(async (req, res) => {
 })
 
 const cancelRequest = catchAsync(async (req, res) => {
-    const requesterId = req.user.id
+
+    const requesterId = req.user.id || req.user._id;
     const { recipientId } = req.params;
-    console.log('requesterid', requesterId)
-    console.log('recipientid', recipientId)
+
     const connection = await Connection.findOneAndDelete({
         requester: requesterId,
         recipient: recipientId,
         status: 'pending'
-    })
+    });
 
     if (!connection) {
-        return res.status(404).send({ message: "No pending request/document found to cancel." })
+        return res.status(404).send({ message: "No pending request found to cancel." });
     }
 
     res.status(httpStatus.status.NO_CONTENT).send();
-})
+});
 
 module.exports = { sendRequest, acceptRequest, getConnections, ignoreRequest, getMyConnections, cancelRequest }
