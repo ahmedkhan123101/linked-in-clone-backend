@@ -16,7 +16,8 @@ const createPost = catchAsync(async (req, res, next) => {
 })
 
 const getPosts = catchAsync(async (req, res) => {
-    const posts = await postService.queryPosts();
+    const currentUserId = req.user.id
+    const posts = await postService.queryPosts(currentUserId);
     res.send(posts);
 })
 
