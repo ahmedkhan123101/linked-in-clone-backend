@@ -16,7 +16,27 @@ const queryPosts = async (currentUserId) => {
     return posts;
 }
 
+const queryUserPosts = async (userId) => {
+    return await Post.find({ author: userId })
+        .populate('author', 'name lastName profilePicture')
+        .sort({ createdAt: -1 });
+};
+
+const deletePostById = async (postId, userId) => {
+    const post = await Post.findById(postId);
+    if (!post) {
+        throw new ApiError(httpStatus.NOT_FOUND, 'Post not found');
+    }
+    if (post.author.toString() !== userId) {
+        throw new ApiError(httpStatus.FORBIDDEN, 'You can only delete your own posts');
+    }
+    await post.deleteOne();
+    return post;
+};
+
 module.exports = {
     createPost,
     queryPosts,
+    queryUserPosts,
+    deletePostById
 };

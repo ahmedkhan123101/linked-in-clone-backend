@@ -56,4 +56,14 @@ const toggleLike = catchAsync(async (req, res) => {
     });
 });
 
-module.exports = { getPosts, createPost, toggleLike };
+const getMyPosts = catchAsync(async (req, res) => {
+    const posts = await postService.queryUserPosts(req.user.id);
+    res.send(posts);
+});
+
+const deletePost = catchAsync(async (req, res) => {
+    await postService.deletePostById(req.params.postId, req.user.id);
+    res.status(httpStatus.status.NO_CONTENT).send();
+});
+
+module.exports = { getPosts, createPost, toggleLike, getMyPosts, deletePost };
