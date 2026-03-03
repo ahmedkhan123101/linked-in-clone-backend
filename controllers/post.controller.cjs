@@ -66,4 +66,30 @@ const deletePost = catchAsync(async (req, res) => {
     res.status(httpStatus.status.NO_CONTENT).send();
 });
 
-module.exports = { getPosts, createPost, toggleLike, getMyPosts, deletePost };
+const updatePost = catchAsync(async (req, res) => {
+    // req.body.images contains the existing URLs kept by the user
+    // req.files contains the new files uploaded to Cloudinary
+
+    let updatedImages = [];
+
+    // Add existing images.
+    if (req.body.images) {//existing post urls.
+        updatedImages = Array.isArray(req.body.images) ? req.body.images : [req.body.images];
+    }
+
+    // Add new cloudinary urls.
+    if (req.files) {//new images.
+        const newUrls = req.files.map(file => file.path);
+        updatedImages = [...updatedImages, ...newUrls];
+    }
+
+    const updateData = {
+        content: req.body.content,
+        images: updatedImages
+    };
+
+    const post = await postService.updatePostById(req.params.postId, req.user.id, updateData);
+    res.send(post);
+});
+
+module.exports = { getPosts, createPost, toggleLike, getMyPosts, deletePost, updatePost };

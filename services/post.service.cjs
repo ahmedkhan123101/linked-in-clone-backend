@@ -34,9 +34,25 @@ const deletePostById = async (postId, userId) => {
     return post;
 };
 
+const updatePostById = async (postId, userId, updateBody) => {
+    const post = await Post.findById(postId);
+    if (!post) {
+        throw new ApiError(httpStatus.NOT_FOUND, 'Post not found');
+    }
+    if (post.author.toString() !== userId) {
+        throw new ApiError(httpStatus.FORBIDDEN, 'You can only edit your own posts');
+    }
+
+    Object.assign(post, updateBody);
+
+    await post.save();
+    return post.populate('author', 'name lastName profilePicture');
+};
+
 module.exports = {
     createPost,
     queryPosts,
     queryUserPosts,
-    deletePostById
+    deletePostById,
+    updatePostById
 };

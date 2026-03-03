@@ -16,5 +16,6 @@ router.post('/:postId/like', auth, postController.toggleLike)
 router.use('/:postId/comments', commentRoute)
 router.get('/my-posts', auth, postController.getMyPosts)
 router.delete('/:postId', auth, postController.deletePost);
+router.patch('/:postId', auth, upload.array('files', 5), postController.updatePost);
 
 module.exports = router;
