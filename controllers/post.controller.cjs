@@ -67,6 +67,7 @@ const deletePost = catchAsync(async (req, res) => {
 });
 
 const updatePost = catchAsync(async (req, res) => {
+
     // req.body.images contains the existing URLs kept by the user
     // req.files contains the new files uploaded to Cloudinary
 
