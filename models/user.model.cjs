@@ -39,7 +39,32 @@ const userSchema = mongoose.Schema(
         profilePicture: {
             type: String,
             default: ""
-        }
+        },
+        headline: { type: String, default: "" },
+        city: { type: String, default: "" },
+        skills: [String],
+        experience: [{
+            title: { type: String, required: true },
+            company: { type: String, required: true },
+            employmentType: String,
+            startMonth: String,
+            startYear: Number,
+            endMonth: String,
+            endYear: Number,
+            currentRole: { type: Boolean, default: false },
+            description: String,
+            skills: [String]
+        }],
+        education: [{
+            school: { type: String, required: true },
+            degree: String,
+            fieldOfStudy: String,
+            startYear: Number,
+            endYear: Number,
+            grade: String,
+            activities: String,
+            description: String
+        }]
     },
     {
         timestamps: true,
