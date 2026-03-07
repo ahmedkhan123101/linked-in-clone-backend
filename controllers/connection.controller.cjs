@@ -30,6 +30,26 @@ const sendRequest = catchAsync(async (req, res) => {
     res.status(httpStatus.status.CREATED).send(connection);
 })
 
+const removeConnection = catchAsync(async (req, res) => {
+    const userId = req.user.id;
+    const { connectionId } = req.params;
+
+    const connection = await Connection.findOneAndDelete({
+        _id: connectionId,
+        status: 'accepted',
+        $or: [
+            { requester: userId },
+            { recipient: userId }
+        ]
+    });
+
+    if (!connection) {
+        return res.status(404).send({ message: "Connection not found or already removed." });
+    }
+
+    res.status(httpStatus.status.NO_CONTENT).send();
+});
+
 const acceptRequest = catchAsync(async (req, res) => {
     const { connectionId } = req.params
     const userId = req.user.id
@@ -116,4 +136,4 @@ const cancelRequest = catchAsync(async (req, res) => {
     res.status(httpStatus.status.NO_CONTENT).send();
 });
 
-module.exports = { sendRequest, acceptRequest, getConnections, ignoreRequest, getMyConnections, cancelRequest }
+module.exports = { sendRequest, acceptRequest, getConnections, ignoreRequest, getMyConnections, cancelRequest, removeConnection }

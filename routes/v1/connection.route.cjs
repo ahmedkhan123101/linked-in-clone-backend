@@ -9,5 +9,6 @@ router.get('/', auth, connectionController.getConnections)
 router.get('/my-connections', auth, connectionController.getMyConnections)
 router.delete('/ignore/:senderId', auth, connectionController.ignoreRequest)
 router.delete('/cancel/:recipientId', auth, connectionController.cancelRequest)
+router.delete('/remove/:connectionId', auth, connectionController.removeConnection);
 
 module.exports = router;
