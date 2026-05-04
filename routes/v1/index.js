@@ -1,8 +1,8 @@
 const express = require('express')
-const authRoute = require('./auth.route.cjs')
-const postRoute = require('./post.route.cjs')
-const connectionRoute = require('./connection.route.cjs')
-const userRoute = require('./user.route.cjs')
+const authRoute = require('./auth.route.js')
+const postRoute = require('./post.route.js')
+const connectionRoute = require('./connection.route.js')
+const userRoute = require('./user.route.js')
 
 const router = express.Router()
 

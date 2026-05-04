@@ -2,11 +2,10 @@
   "name": "linked-in-clone-backend",
   "version": "1.0.0",
   "description": "Backend for LinkedInClone",
-  "main": "app.cjs",
-  "type": "commonjs",
+  "main": "app.js",
   "scripts": {
-    "start": "node app.cjs",
-    "dev": "nodemon app.cjs"
+    "start": "node app.js",
+    "dev": "nodemon app.js"
   },
   "dependencies": {
     "bcrypt": "^6.0.0",

@@ -2,10 +2,10 @@ const express = require('express')
 const multer = require('multer')
 const router = express.Router()
 
-const postController = require('../../controllers/post.controller.cjs')
-const auth = require("../../middlewares/auth.cjs")
+const postController = require('../../controllers/post.controller.js')
+const auth = require("../../middlewares/auth.js")
 
-const commentRoute = require('./comment.route.cjs')
+const commentRoute = require('./comment.route.js')
 
 const { storage } = require('../../config/cloudinaryConfig.js')
 const upload = multer({ storage: storage })

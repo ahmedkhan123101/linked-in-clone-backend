@@ -1,4 +1,4 @@
-// src/backend/models/token.model.cjs
+// src/backend/models/token.model.js
 const mongoose = require('mongoose');
 
 const tokenSchema = mongoose.Schema(

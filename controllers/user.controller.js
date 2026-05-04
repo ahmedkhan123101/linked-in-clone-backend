@@ -1,6 +1,6 @@
 const httpStatus = require('http-status');
-const catchAsync = require('../utils/catchAsync.cjs');
-const { User } = require('../models/index.cjs');
+const catchAsync = require('../utils/catchAsync.js');
+const { User } = require('../models/index.js');
 
 const getUsers = catchAsync(async (req, res) => {
     const currentUserId = req.user.id

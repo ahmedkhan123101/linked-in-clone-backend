@@ -1,9 +1,9 @@
 const express = require('express');
-const validate = require('../../middlewares/validate.cjs')
-const authValidation = require('../../validations/auth.validation.cjs')
-const authController = require('../../controllers/auth.controller.cjs');
-const auth = require('../../middlewares/auth.cjs');
-const upload = require('../../middlewares/upload.cjs')
+const validate = require('../../middlewares/validate.js')
+const authValidation = require('../../validations/auth.validation.js')
+const authController = require('../../controllers/auth.controller.js');
+const auth = require('../../middlewares/auth.js');
+const upload = require('../../middlewares/upload.js')
 
 const router = express.Router();
 

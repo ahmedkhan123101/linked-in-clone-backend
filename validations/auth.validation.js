@@ -1,5 +1,5 @@
 const Joi = require('joi');
-const { password } = require('./custom.validation.cjs');
+const { password } = require('./custom.validation.js');
 
 const register = {
   body: Joi.object().keys({
@@ -17,4 +17,4 @@ const login = {
   }),
 };
 
-module.exports = {register, login}
+module.exports = { register, login }

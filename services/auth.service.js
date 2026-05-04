@@ -1,8 +1,8 @@
 const httpStatus = require("http-status")
-const userService = require('../services/user.service.cjs')
+const userService = require('./user.service.js')
 const ApiError = require('../utils/ApiError.js')
-const Token = require('../models/token.model.cjs'); // Import the model
-const { tokenTypes } = require('../config/tokens.cjs'); // Import the types
+const Token = require('../models/token.model.js'); // Import the model
+const { tokenTypes } = require('../config/tokens.js'); // Import the types
 
 const loginUserWithEmailAndPassword = async (email, password) => {
   const user = await userService.getUserByEmail(email); //get from MongoDB

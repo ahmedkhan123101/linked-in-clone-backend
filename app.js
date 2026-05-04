@@ -4,8 +4,8 @@ const cors = require('cors');
 require('dotenv').config();
 const mongoose = require('mongoose');
 const passport = require('passport');
-const v1Routes = require('./routes/v1/index.cjs');
-const { jwtStrategy } = require('./config/passport.cjs');
+const v1Routes = require('./routes/v1/index.js');
+const { jwtStrategy } = require('./config/passport.js');
 
 const app = express();
 

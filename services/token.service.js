@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
 const moment = require('moment');
-const config = require('../config/config.cjs');
-const { Token } = require('../models/index.cjs'); // Import the Token model
+const config = require('../config/config.js');
+const { Token } = require('../models/index.js'); // Import the Token model
 
 const generateToken = (userId, expires, type = "access", secret = config.jwt.secret) => {
     const payload = {

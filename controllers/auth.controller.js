@@ -1,5 +1,5 @@
 const httpStatus = require('http-status')
-const { userService, tokenService, authService } = require('../services/index.cjs'); // Adjust path if needed
+const { userService, tokenService, authService } = require('../services/index.js'); // Adjust path if needed
 const cloudinary = require('cloudinary').v2
 
 const register = async (req, res, next) => {

@@ -1,6 +1,6 @@
 const { Strategy: JwtStrategy, ExtractJwt } = require('passport-jwt');
-const config = require('./config.cjs');
-const { User } = require('../models/index.cjs');
+const config = require('./config.js');
+const { User } = require('../models/index.js');
 
 const jwtOptions = {
     jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),

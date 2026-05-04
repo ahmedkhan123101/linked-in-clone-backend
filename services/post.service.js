@@ -1,4 +1,4 @@
-const Post = require('../models/post.model.cjs');
+const Post = require('../models/post.model.js');
 
 /**
  * Create a post

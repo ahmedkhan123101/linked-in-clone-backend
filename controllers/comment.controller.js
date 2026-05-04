@@ -1,6 +1,6 @@
 const httpStatus = require('http-status')
-const catchAsync = require('../utils/catchAsync.cjs')
-const { Comment, Post } = require('../models/index.cjs')
+const catchAsync = require('../utils/catchAsync.js')
+const { Comment, Post } = require('../models/index.js')
 const ApiError = require('../utils/ApiError.js')
 
 // Add comment to Post

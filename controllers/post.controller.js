@@ -1,7 +1,7 @@
 const httpStatus = require('http-status');
-const { postService } = require('../services/index.cjs');
-const catchAsync = require('../utils/catchAsync.cjs');
-const { Post } = require('../models/index.cjs');
+const { postService } = require('../services/index.js');
+const catchAsync = require('../utils/catchAsync.js');
+const { Post } = require('../models/index.js');
 
 const createPost = catchAsync(async (req, res, next) => {
     const imgUrls = req.files ? req.files.map(file => file.path) : [];//return paths or []

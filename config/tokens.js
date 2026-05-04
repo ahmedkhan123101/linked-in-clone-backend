@@ -1,4 +1,4 @@
-// src/backend/config/tokens.cjs
+// src/backend/config/tokens.js
 const tokenTypes = {
     ACCESS: 'access',
     REFRESH: 'refresh',
