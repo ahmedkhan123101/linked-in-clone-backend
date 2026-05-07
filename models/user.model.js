@@ -1,6 +1,8 @@
 const mongoose = require('mongoose');
 const validator = require('validator');
 const bcrypt = require('bcrypt');
+const httpStatus = require('http-status').default;
+const ApiError = require('../utils/ApiError.js');
 
 const userSchema = mongoose.Schema(
     {
@@ -22,7 +24,7 @@ const userSchema = mongoose.Schema(
             lowercase: true,
             validate(value) {
                 if (!validator.isEmail(value)) {
-                    throw new Error('Invalid email format.');
+                    throw new ApiError(httpStatus.BAD_REQUEST, 'Invalid email format.');
                 }
             },
         },

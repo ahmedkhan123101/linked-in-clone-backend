@@ -1,6 +1,7 @@
-const httpStatus = require('http-status');
+const httpStatus = require('http-status').default;
 const catchAsync = require('../utils/catchAsync.js');
 const { User } = require('../models/index.js');
+const ApiError = require('../utils/ApiError.js');
 
 const getUsers = catchAsync(async (req, res) => {
     const currentUserId = req.user.id
@@ -16,17 +17,17 @@ const updateProfile = catchAsync(async (req, res) => {
     );
 
     if (!user) {
-        return res.status(httpStatus.status.NOT_FOUND).send({ message: "User not found" });
+        throw new ApiError(httpStatus.NOT_FOUND, "User not found");
     }
 
-    res.status(httpStatus.status.OK).send(user);
+    res.status(httpStatus.OK).send(user);
 });
 
 const addExperience = catchAsync(async (req, res) => {
     const user = await User.findById(req.user.id);
     user.experience.push(req.body);
     await user.save();
-    res.status(httpStatus.status.CREATED).send(user);
+    res.status(httpStatus.CREATED).send(user);
 });
 
 const removeExperience = catchAsync(async (req, res) => {
@@ -36,19 +37,19 @@ const removeExperience = catchAsync(async (req, res) => {
         { $pull: { experience: { _id: expId } } },
         { new: true }
     );
-    res.status(httpStatus.status.OK).send(user);
+    res.status(httpStatus.OK).send(user);
 });
 
 const addEducation = catchAsync(async (req, res) => {
     const user = await User.findById(req.user.id);
     if (!user) {
-        return res.status(httpStatus.status.NOT_FOUND).send({ message: "User not found" });
+        throw new ApiError(httpStatus.NOT_FOUND, "User not found");
     }
 
     user.education.push(req.body);
     await user.save();
 
-    res.status(httpStatus.status.CREATED).send(user);
+    res.status(httpStatus.CREATED).send(user);
 });
 
 const removeEducation = catchAsync(async (req, res) => {
@@ -60,10 +61,10 @@ const removeEducation = catchAsync(async (req, res) => {
     );
 
     if (!user) {
-        return res.status(httpStatus.status.NOT_FOUND).send({ message: "User not found" });
+        throw new ApiError(httpStatus.NOT_FOUND, "User not found");
     }
 
-    res.status(httpStatus.status.OK).send(user);
+    res.status(httpStatus.OK).send(user);
 });
 
 module.exports = { getUsers, updateProfile, addExperience, removeExperience, removeEducation, addEducation }

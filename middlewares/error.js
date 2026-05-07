@@ -1,19 +1,19 @@
-const httpStatus = require('http-status');
+const httpStatus = require('http-status').default;
 
 const errorHandler = (err, req, res, next) => {
-    let { statusCode, message } = err;
+    const rawStatusCode = err?.statusCode ?? err?.status;
+    const parsedStatusCode = Number(rawStatusCode);
 
-    if (!statusCode) {
-        statusCode = httpStatus.INTERNAL_SERVER_ERROR;
-        message = httpStatus[httpStatus.INTERNAL_SERVER_ERROR];
-    }
+    const statusCode = Number.isInteger(parsedStatusCode) ? parsedStatusCode : 500;
+    const message =
+        err?.message || httpStatus?.[statusCode] || 'Internal Server Error';
 
-    res.locals.errorMessage = err.message;
+    res.locals.errorMessage = err?.message;
 
     const response = {
         code: statusCode,
         message,
-        stack: err.stack,
+        stack: err?.stack,
     };
 
     res.status(statusCode).send(response);

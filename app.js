@@ -26,23 +26,21 @@ mongoose.connect(mongoUri, { serverSelectionTimeoutMS: 1000 })
   .then(() => console.log('Connected!'))
   .catch(err => console.error('Connection error:', err));
 
+const { errorHandler } = require('./middlewares/error.js');
+const ApiError = require('./utils/ApiError.js');
+const httpStatus = require('http-status').default;
+
 app.use('/v1', v1Routes);
 
-app.use((err, req, res, next) => {
-  console.log("err:", err)//this line not printing.
-  const statusCode = err.statusCode || 500;
-  const message = err.message || 'Internal Server Error';
-
-  if (statusCode === 500) {
-    console.error(err);
-  }
-
-  res.status(statusCode).json({
-    code: statusCode,
-    message: message,
-  });
+// send back a 404 error for any unknown api request
+app.use((req, res, next) => {
+  next(new ApiError(httpStatus.NOT_FOUND, 'Not found'));
 });
 
+// handle error
+app.use(errorHandler);
+
 app.listen(3000, () => {
+
   console.log(`LinkedInClone server listening on http://localhost:3000`);
 });

@@ -1,18 +1,19 @@
-const httpStatus = require('http-status');
+const httpStatus = require('http-status').default;
 const { postService } = require('../services/index.js');
 const catchAsync = require('../utils/catchAsync.js');
 const { Post } = require('../models/index.js');
+const ApiError = require('../utils/ApiError.js');
 
-const createPost = catchAsync(async (req, res, next) => {
-    const imgUrls = req.files ? req.files.map(file => file.path) : [];//return paths or []
+const createPost = catchAsync(async (req, res) => {
+    const imgUrls = req.files ? req.files.map(file => file.path) : [];
 
     const post = await postService.createPost({
         content: req.body.content,
         author: req.user.id,
-        images: imgUrls,//Array above
+        images: imgUrls,
     });
 
-    res.status(httpStatus.status.CREATED).send(post);
+    res.status(httpStatus.CREATED).send(post);
 })
 
 const getPosts = catchAsync(async (req, res) => {
@@ -22,34 +23,27 @@ const getPosts = catchAsync(async (req, res) => {
 })
 
 const toggleLike = catchAsync(async (req, res) => {
-    // get post id from url and user id from my auth middleware
     const { postId } = req.params;
     const userId = req.user.id;
 
-    // find post but only get the likes array so it's faster
     const post = await Post.findById(postId).select('_id likes');
 
-    // safety check if post is even there
     if (!post) {
         throw new ApiError(httpStatus.NOT_FOUND, 'Post not found');
     }
 
-    // check if i already liked it
     const isLiked = post.likes.includes(userId);
 
-    // if liked then pull (remove) me, else add me to set (no duplicates)
     const update = isLiked
         ? { $pull: { likes: userId } }
         : { $addToSet: { likes: userId } };
 
-    // update the db and get back the new list of likes
     const updatedPost = await Post.findByIdAndUpdate(postId, update, {
         new: true,
         runValidators: true
     }).select('likes');
 
-    // send back the id, the array, and how many likes total
-    res.status(httpStatus.status.OK).send({
+    res.status(httpStatus.OK).send({
         postId: updatedPost._id,
         likes: updatedPost.likes,
         count: updatedPost.likes.length
@@ -63,23 +57,17 @@ const getMyPosts = catchAsync(async (req, res) => {
 
 const deletePost = catchAsync(async (req, res) => {
     await postService.deletePostById(req.params.postId, req.user.id);
-    res.status(httpStatus.status.NO_CONTENT).send();
+    res.status(httpStatus.NO_CONTENT).send();
 });
 
 const updatePost = catchAsync(async (req, res) => {
-
-    // req.body.images contains the existing URLs kept by the user
-    // req.files contains the new files uploaded to Cloudinary
-
     let updatedImages = [];
 
-    // Add existing images.
-    if (req.body.images) {//existing post urls.
+    if (req.body.images) {
         updatedImages = Array.isArray(req.body.images) ? req.body.images : [req.body.images];
     }
 
-    // Add new cloudinary urls.
-    if (req.files) {//new images.
+    if (req.files) {
         const newUrls = req.files.map(file => file.path);
         updatedImages = [...updatedImages, ...newUrls];
     }

@@ -1,4 +1,4 @@
-const httpStatus = require('http-status')
+const httpStatus = require('http-status').default
 const catchAsync = require('../utils/catchAsync.js')
 const { Comment, Post } = require('../models/index.js')
 const ApiError = require('../utils/ApiError.js')
@@ -9,7 +9,7 @@ const addComment = catchAsync(async (req, res) => {
     const { content } = req.body;
     const post = await Post.findById(postId)
     if (!post) {
-        throw new ApiError(httpStatus.status.NOT_FOUND, "Post not found.")
+        throw new ApiError(httpStatus.NOT_FOUND, "Post not found.")
     }
     //Create Comment in MongoDB
     const comment = await Comment.create({
@@ -23,7 +23,7 @@ const addComment = catchAsync(async (req, res) => {
     //Send comment and some user info as response to add to list of 
     // comments instead of refreshing whole page by retreiving from db
     const populatedComment = await comment.populate('author', 'name lastName profilePicture')//Take author id, check in Users, attach name, lastName
-    res.status(httpStatus.status.CREATED).send(populatedComment)
+    res.status(httpStatus.CREATED).send(populatedComment)
 })
 
 //Get comments
@@ -38,7 +38,7 @@ const getComments = catchAsync(async (req, res) => {
         ...comments.filter(c => c.author._id.toString() !== userId)
     ]
 
-    res.status(httpStatus.status.CREATED).send(sortedComments)
+    res.status(httpStatus.OK).send(sortedComments)
 })
 
 module.exports = { addComment, getComments };

@@ -1,13 +1,14 @@
-const httpStatus = require('http-status')
+const httpStatus = require('http-status').default
 const catchAsync = require('../utils/catchAsync.js')
 const Connection = require('../models/connection.model.js')
+const ApiError = require('../utils/ApiError.js')
 
 const sendRequest = catchAsync(async (req, res) => {
     const requesterId = req.user.id
     const { recipientId } = req.params;
 
     if (requesterId === recipientId) {
-        return res.status(400).send({ message: "You cannot connect with yourself." })
+        throw new ApiError(httpStatus.BAD_REQUEST, "You cannot connect with yourself.")
     }
 
     const existingConnection = await Connection.findOne({
@@ -18,7 +19,7 @@ const sendRequest = catchAsync(async (req, res) => {
     })
 
     if (existingConnection) {
-        return res.status(400).send({ message: "Connection or request already exists." })
+        throw new ApiError(httpStatus.BAD_REQUEST, "Connection or request already exists.")
     }
 
     const connection = await Connection.create({
@@ -27,7 +28,7 @@ const sendRequest = catchAsync(async (req, res) => {
         status: 'pending'
     })
 
-    res.status(httpStatus.status.CREATED).send(connection);
+    res.status(httpStatus.CREATED).send(connection);
 })
 
 const removeConnection = catchAsync(async (req, res) => {
@@ -44,10 +45,10 @@ const removeConnection = catchAsync(async (req, res) => {
     });
 
     if (!connection) {
-        return res.status(404).send({ message: "Connection not found or already removed." });
+        throw new ApiError(httpStatus.NOT_FOUND, "Connection not found or already removed.")
     }
 
-    res.status(httpStatus.status.NO_CONTENT).send();
+    res.status(httpStatus.NO_CONTENT).send();
 });
 
 const acceptRequest = catchAsync(async (req, res) => {
@@ -57,13 +58,11 @@ const acceptRequest = catchAsync(async (req, res) => {
     const connection = await Connection.findById(connectionId)
 
     if (!connection) {
-        return res.status(httpStatus.status.NOT_FOUND).send({ message: 'Connection req (doc) not found.' })
+        throw new ApiError(httpStatus.NOT_FOUND, 'Connection req (doc) not found.')
     }
     //Only recipient can accept request.
     if (connection.recipient.toString() !== userId) {
-        return res.status(httpStatus.status.FORBIDDEN).send({
-            message: "You are not authorized to accept this request."
-        })
+        throw new ApiError(httpStatus.FORBIDDEN, "You are not authorized to accept this request.")
     }
     //Update connection status.
     connection.status = "accepted"
@@ -83,10 +82,10 @@ const ignoreRequest = catchAsync(async (req, res) => {
     })
 
     if (!connection) {
-        return res.status(404).send({ message: "Connection request/doc not found." })
+        throw new ApiError(httpStatus.NOT_FOUND, "Connection request/doc not found.")
     }
 
-    res.status(httpStatus.status.NO_CONTENT).send()
+    res.status(httpStatus.NO_CONTENT).send()
 })
 
 const getConnections = catchAsync(async (req, res) => {
@@ -130,10 +129,10 @@ const cancelRequest = catchAsync(async (req, res) => {
     });
 
     if (!connection) {
-        return res.status(404).send({ message: "No pending request found to cancel." });
+        throw new ApiError(httpStatus.NOT_FOUND, "No pending request found to cancel.")
     }
 
-    res.status(httpStatus.status.NO_CONTENT).send();
+    res.status(httpStatus.NO_CONTENT).send();
 });
 
 module.exports = { sendRequest, acceptRequest, getConnections, ignoreRequest, getMyConnections, cancelRequest, removeConnection }
