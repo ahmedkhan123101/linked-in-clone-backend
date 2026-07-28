@@ -1,4 +1,6 @@
 const Post = require('../models/post.model.js');
+const httpStatus = require('http-status').default;
+const ApiError = require('../utils/ApiError.js');
 
 /**
  * Create a post
