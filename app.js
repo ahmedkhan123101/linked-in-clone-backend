@@ -4,6 +4,7 @@ const cors = require('cors');
 require('dotenv').config();
 const mongoose = require('mongoose');
 const passport = require('passport');
+const cookieParser = require('cookie-parser');
 const v1Routes = require('./routes/v1/index.js');
 const { jwtStrategy } = require('./config/passport.js');
 
@@ -17,6 +18,8 @@ app.use(cors({
 
 app.use(express.json({ limit: '5mb' }));
 app.use(express.urlencoded({ limit: '5mb', extended: true }));
+
+app.use(cookieParser());
 
 app.use(passport.initialize());
 passport.use('jwt', jwtStrategy);
