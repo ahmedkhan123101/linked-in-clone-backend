@@ -1,11 +1,26 @@
 const httpStatus = require('http-status').default;
+const cloudinary = require('cloudinary').v2;
 const { postService } = require('../services/index.js');
 const catchAsync = require('../utils/catchAsync.js');
 const { Post } = require('../models/index.js');
 const ApiError = require('../utils/ApiError.js');
 
+const uploadImagesToCloudinary = async (files = []) => {
+    const uploads = files.map(file => {
+        const fileBase64 = `data:${file.mimetype};base64,${file.buffer.toString('base64')}`;
+        return cloudinary.uploader.upload(fileBase64, {
+            folder: 'linkedinclone/posts',
+            allowed_formats: ['jpg', 'jpeg', 'png', 'webp'],
+            transformation: [{ width: 1000, crop: 'limit' }],
+        });
+    });
+
+    const results = await Promise.all(uploads);
+    return results.map(result => result.secure_url);
+};
+
 const createPost = catchAsync(async (req, res) => {
-    const imgUrls = req.files ? req.files.map(file => file.path) : [];
+    const imgUrls = await uploadImagesToCloudinary(req.files);
 
     const post = await postService.createPost({
         content: req.body.content,
@@ -67,8 +82,8 @@ const updatePost = catchAsync(async (req, res) => {
         updatedImages = Array.isArray(req.body.images) ? req.body.images : [req.body.images];
     }
 
-    if (req.files) {
-        const newUrls = req.files.map(file => file.path);
+    if (req.files && req.files.length) {
+        const newUrls = await uploadImagesToCloudinary(req.files);
         updatedImages = [...updatedImages, ...newUrls];
     }
 
