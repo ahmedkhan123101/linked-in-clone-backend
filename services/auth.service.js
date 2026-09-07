@@ -1,12 +1,13 @@
-const httpStatus = require("http-status")
-const userService = require('./user.service.js')
-const ApiError = require('../utils/ApiError.js')
-const Token = require('../models/token.model.js'); // Import the model
-const { tokenTypes } = require('../config/tokens.js'); // Import the types
+const httpStatus = require('http-status').default;
+const userService = require('./user.service.js');
+const tokenService = require('./token.service.js');
+const ApiError = require('../utils/ApiError.js');
+const Token = require('../models/token.model.js');
+const { tokenTypes } = require('../config/tokens.js');
 
 const loginUserWithEmailAndPassword = async (email, password) => {
-  const user = await userService.getUserByEmail(email); //get from MongoDB
-  if (!user || !(await user.isPasswordMatch(password))) { //Schema method for checking password with bcrypt
+  const user = await userService.getUserByEmail(email);
+  if (!user || !(await user.isPasswordMatch(password))) {
     throw new ApiError(httpStatus.UNAUTHORIZED, 'Incorrect email or password');
   }
   return user;
@@ -26,4 +27,11 @@ const logout = async (refreshToken) => {
   await refreshTokenDoc.deleteOne();
 };
 
-module.exports = { loginUserWithEmailAndPassword, logout }
+const refreshAuth = async (refreshToken) => {
+  if (!refreshToken) {
+    throw new ApiError(httpStatus.UNAUTHORIZED, 'No refresh token provided');
+  }
+  return tokenService.refreshAuth(refreshToken);
+};
+
+module.exports = { loginUserWithEmailAndPassword, logout, refreshAuth };
