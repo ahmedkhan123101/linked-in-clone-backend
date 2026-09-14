@@ -27,7 +27,10 @@ passport.use('jwt', jwtStrategy);
 const mongoUri = process.env.MONGO_URI;
 mongoose.connect(mongoUri, { serverSelectionTimeoutMS: 1000 })
   .then(() => console.log('Connected!'))
-  .catch(err => console.error('Connection error:', err));
+  .catch(err => {
+    console.error('Connection error:', err)
+    process.exit(1)
+  });
 
 const { errorHandler } = require('./middlewares/error.js');
 const ApiError = require('./utils/ApiError.js');
