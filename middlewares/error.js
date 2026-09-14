@@ -13,7 +13,7 @@ const errorHandler = (err, req, res, next) => {
     const response = {
         code: statusCode,
         message,
-        ...(process.env.NODE_ENV !== production && { stack: err?.stack }),
+        ...(process.env.NODE_ENV !== "production" && { stack: err?.stack }),
     };
 
     res.status(statusCode).send(response);
