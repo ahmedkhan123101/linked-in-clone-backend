@@ -12,11 +12,16 @@ const uploadImagesToCloudinary = async (files = []) => {
             folder: 'linkedinclone/posts',
             allowed_formats: ['jpg', 'jpeg', 'png', 'webp'],
             transformation: [{ width: 1000, crop: 'limit' }],
+            timeout: 10000,
         });
     });
-
-    const results = await Promise.all(uploads);
-    return results.map(result => result.secure_url);
+    try {
+        const results = await Promise.all(uploads)
+        return results.map(result => result.secure_url)
+    }
+    catch (err) {
+        throw new ApiError(httpStatus.SERVICE_UNAVAILABLE, 'Image upload failed. Please try again.')
+    }
 };
 
 const createPost = catchAsync(async (req, res) => {
