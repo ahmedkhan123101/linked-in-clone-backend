@@ -11,7 +11,10 @@ const { jwtStrategy } = require('./config/passport.js');
 const app = express();
 
 app.use(cors({
-  origin: /^http:\/\/localhost:\d+$/,
+  origin: [
+    /^http:\/\/localhost:\d+$/,
+    'https://linked-in-clone-mu-pearl.vercel.app'
+  ],
   methods: 'GET,POST,PUT,DELETE,PATCH',
   credentials: true
 }));
