@@ -5,10 +5,11 @@ const cloudinary = require('cloudinary').v2;
 const catchAsync = require('../utils/catchAsync.js');
 const ApiError = require('../utils/ApiError.js');
 
+const isProd = process.env.NODE_ENV === 'production';
 const cookieOptions = {
     httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
-    sameSite: 'strict',
+    secure: isProd,
+    sameSite: isProd ? 'none' : 'strict',
     maxAge: Number(config.jwt.refreshExpMin) * 60 * 1000,
 };
 

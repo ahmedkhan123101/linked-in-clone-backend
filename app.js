@@ -10,6 +10,8 @@ const { jwtStrategy } = require('./config/passport.js');
 
 const app = express();
 
+app.set('trust proxy', 1)
+
 app.use(cors({
   origin: [
     /^http:\/\/localhost:\d+$/,
@@ -49,7 +51,7 @@ app.use((req, res, next) => {
 // handle error
 app.use(errorHandler);
 
-app.listen(3000, () => {
+app.listen(process.env.PORT || 3000, () => {
 
   console.log(`LinkedInClone server listening on http://localhost:3000`);
 });
