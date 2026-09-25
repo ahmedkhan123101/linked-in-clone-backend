@@ -50,8 +50,8 @@ app.use((req, res, next) => {
 
 // handle error
 app.use(errorHandler);
+const PORT = process.env.PORT || 3000
+app.listen(PORT, () => {
 
-app.listen(process.env.PORT || 3000, () => {
-
-  console.log(`LinkedInClone server listening on http://localhost:3000`);
+  console.log(`LinkedInClone server listening on ${PORT}`);
 });
