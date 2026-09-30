@@ -20,6 +20,9 @@ const uploadImagesToCloudinary = async (files = []) => {
         return results.map(result => result.secure_url)
     }
     catch (err) {
+        if (err.http_code && err.http_code < 500) {
+            throw new ApiError(httpStatus.BAD_REQUEST, 'One or more files is not a valid image.')
+        }
         throw new ApiError(httpStatus.SERVICE_UNAVAILABLE, 'Image upload failed. Please try again.')
     }
 };
