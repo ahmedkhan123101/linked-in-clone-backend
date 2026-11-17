@@ -41,6 +41,8 @@ const { errorHandler } = require('./middlewares/error.js');
 const ApiError = require('./utils/ApiError.js');
 const httpStatus = require('http-status').default;
 
+app.get('/health', (req, res) => res.send('ok'));
+
 app.use('/v1', v1Routes);
 
 // send back a 404 error for any unknown api request
