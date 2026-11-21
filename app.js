@@ -18,7 +18,8 @@ app.use(cors({
     'https://linked-in-clone-mu-pearl.vercel.app'
   ],
   methods: 'GET,POST,PUT,DELETE,PATCH',
-  credentials: true
+  credentials: true,
+  maxAge:7200
 }));
 
 app.use(express.json({ limit: '5mb' }));
